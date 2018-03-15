@@ -57,4 +57,27 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/killSelf"
         android:text="show info"/>
+    <Button
+        android:id="@+id/loadAssetsImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/showInfo"
+        android:text="load assets image"/>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/loadAssetsImg"/>
+    <WebView
+        android:id="@+id/webView"
+        android:hardwareAccelerated="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView"/>
 </RelativeLayout>

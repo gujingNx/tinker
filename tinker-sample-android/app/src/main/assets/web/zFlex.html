@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>flex</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .container {
+            width:150px;
+            height:150px;
+            border:1px solid red;
+        }
+        .first-face {
+            display: flex;
+            display: -webkit-flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .pip {
+            display:block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="first-face container">
+        <span class="pip"></span>
+    </div>
+    <div id="test">abc</div>
+
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="zFlex.js"></script>
+
+</body>
+</html>

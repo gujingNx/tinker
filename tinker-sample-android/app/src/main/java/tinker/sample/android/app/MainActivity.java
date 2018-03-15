@@ -18,6 +18,9 @@ package tinker.sample.android.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +30,9 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tencent.tinker.lib.library.TinkerLoadLibrary;
@@ -36,11 +41,17 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import tinker.sample.android.R;
 import tinker.sample.android.util.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Tinker.MainActivity";
+
+    private ImageView _imgageView;
+    private WebView _webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "i am on onCreate classloader:" + MainActivity.class.getClassLoader().toString());
         //test resource change
         Log.e(TAG, "i am on onCreate string:" + getResources().getString(R.string.test_resource));
-//        Log.e(TAG, "i am on patch onCreate");
+//        Log.e(TAG, ">>>>>>>>>>>>> i am on patch onCreate");
 
         Button loadPatchButton = (Button) findViewById(R.id.loadPatch);
 
@@ -105,6 +116,22 @@ public class MainActivity extends AppCompatActivity {
                 showInfo(MainActivity.this);
             }
         });
+
+        //测试替换assets图片热更新功能
+        Button loadAssetsImgButton = (Button) findViewById(R.id.loadAssetsImg);
+        loadAssetsImgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _imgageView.setImageBitmap(getImageFromAssetsFile("star2.png"));
+            }
+        });
+        _imgageView = (ImageView) findViewById(R.id.imageView);
+        _imgageView.setImageBitmap(getImageFromAssetsFile("star1.png"));
+
+        //测试网页webView热更新功能
+        _webView = findViewById(R.id.webView);
+        _webView.clearCache(true);
+        _webView.loadUrl("file:///android_asset/web/zFlex.html");
     }
 
     public boolean showInfo(Context context) {
@@ -163,5 +190,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Utils.setBackground(true);
+    }
+
+    /** * 从Assets中读取图片 * @param fileName * @return */
+    private Bitmap getImageFromAssetsFile(String fileName)
+    {
+        Bitmap image = null;
+        AssetManager am = getResources().getAssets();
+        try
+        {
+            InputStream is = am.open(fileName);
+            image = BitmapFactory.decodeStream(is);
+            is.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return image;
+
     }
 }
