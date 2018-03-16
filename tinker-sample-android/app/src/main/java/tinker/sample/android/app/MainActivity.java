@@ -30,6 +30,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
         //测试网页webView热更新功能
         _webView = findViewById(R.id.webView);
+        WebSettings _webSettings = _webView.getSettings();
+        _webSettings.setJavaScriptEnabled(true);
+        _webSettings.setDefaultTextEncodingName("utf-8");
         _webView.clearCache(true);
         _webView.loadUrl("file:///android_asset/web/zFlex.html");
     }
