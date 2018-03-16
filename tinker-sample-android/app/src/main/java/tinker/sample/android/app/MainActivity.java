@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "i am on onCreate classloader:" + MainActivity.class.getClassLoader().toString());
         //test resource change
         Log.e(TAG, "i am on onCreate string:" + getResources().getString(R.string.test_resource));
-//        Log.e(TAG, ">>>>>>>>>>>>> i am on patch onCreate");
+        Log.e(TAG, ">>>>>>>>>>>>> i am on patch onCreate");
 
         Button loadPatchButton = (Button) findViewById(R.id.loadPatch);
 
