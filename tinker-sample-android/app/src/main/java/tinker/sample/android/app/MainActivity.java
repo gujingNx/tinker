@@ -18,6 +18,7 @@ package tinker.sample.android.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -51,7 +52,7 @@ import tinker.sample.android.util.Utils;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Tinker.MainActivity";
 
-    private ImageView _imgageView;
+    private ImageView _imageView;
     private WebView _webView;
 
     @Override
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "i am on onCreate classloader:" + MainActivity.class.getClassLoader().toString());
         //test resource change
         Log.e(TAG, "i am on onCreate string:" + getResources().getString(R.string.test_resource));
-        Log.e(TAG, ">>>>>>>>>>>>> i am on patch onCreate");
+//        Log.e(TAG, ">>>>>>>>>>>>> i am on patch onCreate");
 
         Button loadPatchButton = (Button) findViewById(R.id.loadPatch);
 
@@ -105,8 +106,16 @@ public class MainActivity extends AppCompatActivity {
         killSelfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
-                android.os.Process.killProcess(android.os.Process.myPid());
+                Context oldC = getApplicationContext();
+                int oldpid = android.os.Process.myPid();
+
+                Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                finish();                     //不确定是否要添加
+                startActivity(i);
+
+                ShareTinkerInternals.killAllOtherProcess(oldC);
+                android.os.Process.killProcess(oldpid);
             }
         });
 
@@ -124,11 +133,11 @@ public class MainActivity extends AppCompatActivity {
         loadAssetsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _imgageView.setImageBitmap(getImageFromAssetsFile("star2.png"));
+                _imageView.setImageBitmap(getImageFromAssetsFile("star2.png"));
             }
         });
-        _imgageView = (ImageView) findViewById(R.id.imageView);
-        _imgageView.setImageBitmap(getImageFromAssetsFile("star1.png"));
+        _imageView = (ImageView) findViewById(R.id.imageView);
+        _imageView.setImageBitmap(getImageFromAssetsFile("star1.png"));
 
         //测试网页webView热更新功能
         _webView = findViewById(R.id.webView);
@@ -214,6 +223,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return image;
-
     }
 }
